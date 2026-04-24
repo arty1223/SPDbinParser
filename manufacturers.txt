@@ -1341,9 +1341,7 @@ Continuation Code 0 1 1 1 1 1 1 1 7F
 15 UNIC Memory Technology Co Ltd 1 0 0 0 1 1 1 1 8F
 16 Shenzhen Huafeng Science Technology 0 0 0 1 0 0 0 0 10
 17 CXMT 1 0 0 1 0 0 0 1 91
-18 Guangzhou Xinyi Heng Computer
-Trading Firm
-1 0 0 1 0 0 1 0 92
+18 Guangzhou Xinyi Heng Computer Trading Firm 1 0 0 1 0 0 1 0 92
 19 SambaNova Systems 0 0 0 1 0 0 1 1 13
 20 V-GEN 1 0 0 1 0 1 0 0 94
 21 Jump Trading 0 0 0 1 0 1 0 1 15
