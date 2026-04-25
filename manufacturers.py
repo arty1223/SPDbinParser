@@ -10,10 +10,11 @@ for i in table:
     elif i == "Continuation Code 0 1 1 1 1 1 1 1 7F\n":
         continue
     t = ' '.join(i[:-19].split()[1:])
-    if K == 0:
-        manufacturers[int('80' + i[-3:-1],16)] = t
-    else:
-        manufacturers[int(hex(K)[2:].capitalize() + i[-3:-1],16)] = t
+    manufacturers[int(hex(K)[2:].capitalize() + i[-3:-1],16)] = t
+    # if K == 0:
+    #     manufacturers[int('80' + i[-3:-1],16)] = t
+    # else:
+    #     manufacturers[int(hex(K)[2:].capitalize() + i[-3:-1],16)] = t
     
 
 with open("./manufacturers.json", "w") as fp:

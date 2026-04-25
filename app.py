@@ -4,15 +4,11 @@ import json
 with open('manufacturers.json') as json_file:
     manufacturers = json.load(json_file)
 
-with open('ddrtypes.json') as json_file:
-    ddrtypes = json.load(json_file)
+with open('ddrTypes.json') as json_file:
+    ddrTypes = json.load(json_file)
 
-def getManufacturer(lb,hb):
-    # производитель
-    id = (lb << 8) + hb
-    if id > 0x8100:
-        id -= 0x8000
-    return manufacturers[str(id)]
+with open('dimmTypes.json') as json_file:
+    dimmTypes = json.load(json_file)
 
 def main():
     # Проверяем, был ли передан параметр
@@ -29,12 +25,12 @@ def main():
         with open(filename, 'rb') as file:
             content = file.read()
             #тип
-        id = content[2]
-        spd_details["ddr_type"] = ddrtypes[str(id)]
-        id = spd_details["ddr_type"][spd_details["ddr_type"].find("DDR")+3]
+        ddr_type = content[2]
+        spd_details["ddr_type"] = ddrTypes[str(ddr_type)]
+        ddr_type = spd_details["ddr_type"][spd_details["ddr_type"].find("DDR")+3]
+        dimm_type = content[3] & 0b1111
         
-        manLb, manHb = 0, 0
-        match id:
+        match ddr_type:
             case '3':
                 manLb = content[117] # id производителя
                 manHb = content[118]
@@ -47,8 +43,8 @@ def main():
             case _:
                 raise("unknown ddr type")
             
-        spd_details["manufacturer"] = getManufacturer(manLb, manHb)
-
+        spd_details["dimm_type"] = dimmTypes[ddr_type+str(dimm_type)]
+        spd_details["manufacturer"] = manufacturers[str(((manLb & ~0x80) << 8) + manHb)]
 
         print(f"{filename}\n", spd_details)
             
@@ -57,7 +53,7 @@ def main():
     except PermissionError:
         print(f"Ошибка: Нет прав для чтения файла '{filename}'")
     except KeyError:
-        print(f"unable to parse manufacturer for {filename}")
+        print(f"unable to parse {filename}")
     except Exception as e:
         print(f"Ошибка при чтении файла: {e}")
 
