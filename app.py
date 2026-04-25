@@ -18,18 +18,17 @@ def main():
         # Пытаемся открыть и прочитать файл
         with open(filename, 'rb') as file:
             content = file.read()
-            print(f"Содержимое файла '{filename}':")
             id = (content[320] << 8) + content[321]
             if id > 0x8100:
                 id -= 0x8000
-            print(manufacturers[str(id)])
+            print(f"{filename} Manufacturer:", manufacturers[str(id)])
             
     except FileNotFoundError:
         print(f"Ошибка: Файл '{filename}' не найден")
     except PermissionError:
         print(f"Ошибка: Нет прав для чтения файла '{filename}'")
     except KeyError:
-        print("unable to parse manufacturer")
+        print(f"unable to parse manufacturer for {filename}")
     except Exception as e:
         print(f"Ошибка при чтении файла: {e}")
 
