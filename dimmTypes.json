@@ -1,0 +1,18 @@
+{
+    "0": "Reserved",
+    "1": "RDIMM",
+    "2": "UDIMM",
+    "3": "SODIMM",
+    "4": "LRDIMM",
+    "5": "CUDIMM",
+    "6": "CSODIMM",
+    "7": "MRDIMM",
+    "8": "CAMM2",
+    "9": "SOCAMM2",
+    "10": "DDIMM",
+    "11": "Solder down",
+    "12": "Reserved",
+    "13": "Reserved",
+    "14": "Reserved",
+    "15": "Reserved"
+}
