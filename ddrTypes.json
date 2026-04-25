@@ -1,0 +1,22 @@
+{
+    "0": "Reserved",
+    "1": "Fast Page Mode",
+    "2": "EDO",
+    "3": "Pipelined Nibble",
+    "4": "SDRAM",
+    "5": "ROM",
+    "6": "DDR SGRAM",
+    "7": "DDR SDRAM",
+    "8": "DDR2 SDRAM",
+    "9": "DDR2 SDRAM FB-DIMM",
+    "10": "DDR2 SDRAM FB-DIMM PROBE",
+    "11": "DDR3 SDRAM",
+    "12": "DDR4 SDRAM",
+    "13": "Reserved",
+    "14": "DDR4E SDRAM",
+    "15": "LPDDR3 SDRAM",
+    "16": "LPDDR4 SDRAM",
+    "17": "LPDDR4X SDRAM",
+    "18": "DDR5 SDRAM",
+    "19": "LPDDR5 SDRAM"
+}
