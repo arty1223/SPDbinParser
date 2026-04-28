@@ -11,7 +11,8 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": "${command:pickArgs}"
+            "args": "DDR5_CRC_OK_M425R1GB4BB0-CQKOD.bin"
+            // "args": "DDR3_SDRAM_SO_DIMM_Micron_Technology_4JSF6464HY_1G1B1Z_512MB_DDR.bin"
         }
     ]
 }

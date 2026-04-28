@@ -13,6 +13,9 @@ with open('dimmTypes.json') as json_file:
 with open('capacityMap.json') as json_file:
     capacityMap = json.load(json_file)
 
+with open('capacityMapD5.json') as json_file:
+    capacityMapD5 = json.load(json_file)
+
 def main():
     # Проверяем, был ли передан параметр
     if len(sys.argv) < 2:
@@ -41,6 +44,7 @@ def main():
                 SDRAM_Width = 2 ** ((content[7] & 0b111) + 2)
                 Logical_Ranks_per_DIMM = ((content[7] & 0b111000) >> 3) + 1
                 capacity = SDRAM_Capacity / 8 * Primary_Bus_Width / SDRAM_Width * Logical_Ranks_per_DIMM
+
             case '4':
                 manLb = content[320] # id производителя
                 manHb = content[321]
@@ -55,13 +59,31 @@ def main():
             case '5':
                 manLb = content[512] # id производителя
                 manHb = content[513]
+
+                print(f"content[234] {bin(content[234])}, content[235] {bin(content[235])}, content[6] {bin(content[6])}, content[4] {bin(content[4])}")
+
+                symmetry = content[234] & 0b100_0000
+                Number_of_sub_channels_per_DIMM = 2 ** ((content[235] & 0b1110_0000) >> 5)
+                Primary_bus_width_per_sub_channel = 2 ** ((content[235] & 0b111) + 3)
+                SDRAM_IO_Width = 2 ** (((content[6] & 0b1110_0000) >> 5) + 2)                
+                SDRAM_Density_per_die = int(capacityMapD5[str(content[4] & 0b11111)])
+                Package_ranks_per_sub_channel = ((content[234] & 0b111000) >> 3) + 1
+                Die_per_package = ((content[4] & 0b1110_0000) >> 5) + 1
+                if ((content[4] & 0b1110_0000) >> 5) > 0b01:
+                    Die_per_package = (Die_per_package - 1) ** 2
+                capacity = Number_of_sub_channels_per_DIMM * Primary_bus_width_per_sub_channel / SDRAM_IO_Width * Die_per_package * SDRAM_Density_per_die / 8 * Package_ranks_per_sub_channel
+                if symmetry:
+                    0
+                else:
+                    0
+
             case _:
                 raise("unknown ddr type")
             
         dimm_type = content[3] & 0b1111    
         spd_details["dimm_type"] = dimmTypes[ddr_type+str(dimm_type)]
         spd_details["manufacturer"] = manufacturers[str(((manLb & ~0x80) << 8) + manHb)]
-        spd_details["capacity"] = capacity
+        spd_details["capacity"] = capacity # В ГБ
 
         print(spd_details)
             
