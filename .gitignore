@@ -5,3 +5,4 @@ lib
 pyenv.cfg
 DDR*
 !ddrTypes.json
+.DS_Store
