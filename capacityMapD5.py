@@ -1,4 +1,4 @@
-{
+capacityMapD5 = {
     "0": "No memory; not defined",
     "1": "4",
     "2": "8",

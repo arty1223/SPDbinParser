@@ -4,5 +4,6 @@ include
 lib
 pyenv.cfg
 DDR*
-!ddrTypes.json
+!ddrTypes.py
+__pycache__
 .DS_Store

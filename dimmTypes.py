@@ -1,10 +1,52 @@
-import json
+dimmTypes = {
+    "50": "Reserved",
+    "51": "RDIMM",
+    "52": "UDIMM",
+    "53": "SODIMM",
+    "54": "LRDIMM",
+    "55": "CUDIMM",
+    "56": "CSODIMM",
+    "57": "MRDIMM",
+    "58": "CAMM2",
+    "59": "SOCAMM2",
+    "510": "DDIMM",
+    "511": "Solder down",
+    "512": "Reserved",
+    "513": "Reserved",
+    "514": "Reserved",
+    "515": "Reserved",
 
-with open('dimmTypes.json') as json_file:
-    dimm1 = json.load(json_file)
-dimm2 = {}
-for k,v in dimm1.items():
-    dimm2[str(int(k,2))] = v
+    "40": "Reserved",
+    "41": "RDIMM",
+    "42": "UDIMM",
+    "43": "SO-DIMM",
+    "44": "LRDIMM",
+    "45": "Mini-RDIMM",
+    "46": "Mini-UDIMM",
+    "47": "Reserved",
+    "48": "72b-SO-RDIMM",
+    "49": "72b-SO-UDIMM",
+    "410": "Reserved",
+    "411": "Reserved",
+    "412": "16b-SO-DIMM",
+    "413": "32b-SO-DIMM",
+    "414": "Reserved",
+    "415": "Reserved",
 
-with open('dimmTypes.json','w') as json_file:
-    json.dump(dimm2 , json_file, ensure_ascii=False) 
+    "30": "Reserved",
+    "31": "RDIMM",
+    "32": "UDIMM",
+    "33": "SO-DIMM",
+    "34": "Micro-DIMM",
+    "35": "Mini-RDIMM",
+    "36": "Mini-UDIMM",
+    "37": "Mini-CDIMM",
+    "38": "72b-SO-UDIMM",
+    "39": "72b-SO-RDIMM",
+    "310": "72b-SO-CDIMM",
+    "311": "LRDIMM",
+    "312": "16b-SO-DIMM",
+    "313": "32b-SO-DIMM",
+    "314": "Reserved",
+    "315": "Reserved"
+}

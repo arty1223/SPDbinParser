@@ -1,4 +1,4 @@
-{
+ddrTypes = {
     "0": "Reserved",
     "1": "Fast Page Mode",
     "2": "EDO",

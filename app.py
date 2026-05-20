@@ -1,32 +1,13 @@
 import sys
-import json
 from ctypes import c_byte, c_ubyte
 from crc import Calculator, Crc32
 
-with open("manufacturers.json") as json_file:
-    manufacturers = json.load(json_file)
-
-with open("ddrTypes.json") as json_file:
-    ddrTypes = json.load(json_file)
-
-with open("dimmTypes.json") as json_file:
-    dimmTypes = json.load(json_file)
-
-with open("capacityMap.json") as json_file:
-    capacityMap = json.load(json_file)
-
-with open("capacityMapD5.json") as json_file:
-    capacityMapD5 = json.load(json_file)
-
-# Стандартные JEDEC скорости для DDR3 и DDR4 (в MT/s)
-JEDEC_SPEEDS = {
-    # DDR3
-    800, 1066, 1333, 1600, 1778, 1866, 2133, 2400, 2666, 2933, 
-    2936, 3000,
-    # DDR4
-    1600, 1866, 2133, 2400, 2666, 2933, 3000, 3200, 3333, 3400,
-    3466, 3600, 3733, 3866, 4000, 4133, 4266, 4400, 4600, 4800
-}
+from jedecSpeeds import jedecSpeeds
+from manufacturers import manufacturers
+from ddrTypes import ddrTypes
+from capacityMap import capacityMap
+from capacityMapD5 import capacityMapD5
+from dimmTypes import dimmTypes
 
 def crc16(a:list):
     crc = 0
@@ -52,7 +33,7 @@ def correct_speed(speed_mts: float) -> int:
     Если скорость превышает максимальную в списке, возвращает её с округлением до целых.
     """
     # Находим ближайшее стандартное значение
-    closest = min(JEDEC_SPEEDS, key=lambda x: abs(x - speed_mts))
+    closest = min(jedecSpeeds, key=lambda x: abs(x - speed_mts))
     # Если разница больше 5% — возможно, это не JEDEC скорость, возвращаем округлённое целое
     if abs(closest - speed_mts) / speed_mts > 0.05:
         return int(round(speed_mts))
