@@ -1,6 +1,7 @@
 import sys
 import json
 from ctypes import c_byte, c_ubyte
+from crc import Calculator, Crc32
 
 with open("manufacturers.json") as json_file:
     manufacturers = json.load(json_file)
@@ -65,6 +66,7 @@ def main():
         sys.exit(1)
 
     # Получаем имя файла из аргументов командной строки
+    crcCalc = Calculator(Crc32.CRC32)
     filename = sys.argv[1]
     spd_details = {}
     try:
@@ -83,8 +85,7 @@ def main():
                     crc = crc16(content[:126]) == ((content[127] << 8) + content[126])
                 else:
                     crc = crc16(content[:117]) == ((content[127] << 8) + content[126])
-                if not crc:
-                    raise Exception("crc err")
+                
                 manLb = content[117]  # id производителя
                 manHb = content[118]
                 part_number = content[128 : 128 + 18]
@@ -106,8 +107,7 @@ def main():
 
             case "4":
                 crc = crc16(content[:126]) == ((content[127] << 8) + content[126])
-                if not crc:
-                    raise Exception("crc err")                
+                                
                 manLb = content[320]  # id производителя
                 manHb = content[321]
                 part_number = content[329 : 329 + 20]
@@ -136,9 +136,7 @@ def main():
                     speed_grade[2] = correct_speed(2000 / tCKavg)
 
             case "5":
-                crc = crc16(content[:510]) == ((content[511] << 8) + content[510])
-                if not crc:
-                    raise Exception("crc err")
+                crc = crc16(content[:510]) == ((content[511] << 8) + content[510])                
             
                 manLb = content[512]  # id производителя
                 manHb = content[513]
@@ -157,6 +155,7 @@ def main():
                 Die_per_package = ((content[4] & 0b1110_0000) >> 5) + 1
                 if ((content[4] & 0b1110_0000) >> 5) > 0b01:
                     Die_per_package = (Die_per_package - 1) ** 2
+
                 capacity = (
                     Number_of_sub_channels_per_DIMM
                     * Primary_bus_width_per_sub_channel
@@ -166,10 +165,26 @@ def main():
                     / 8
                     * Package_ranks_per_sub_channel
                 )
+
                 if symmetry:
-                    0
-                else:
-                    0
+                    even_ranks = capacity / 2
+                    SDRAM_IO_Width = 2 ** (((content[6] & 0b1110_0000) >> 5) + 2)
+                    SDRAM_Density_per_die = int(
+                        capacityMapD5[str(content[4] & 0b11111)]
+                    )
+                    Die_per_package = ((content[4] & 0b1110_0000) >> 5) + 1
+                    Package_ranks_per_sub_channel //= 2
+                    odd_ranks = (
+                        Number_of_sub_channels_per_DIMM
+                        * Primary_bus_width_per_sub_channel
+                        / SDRAM_IO_Width
+                        * Die_per_package
+                        * SDRAM_Density_per_die
+                        / 8
+                        * Package_ranks_per_sub_channel
+                    )
+                    capacity = even_ranks + odd_ranks
+
                 tCKmin = ((content[21] << 8) + content[20]) / 1000
                 speed_grade[0] = 2_000 / tCKmin // 100 * 100
 
@@ -192,7 +207,10 @@ def main():
         spd_details["part_number"] = part_number.decode("utf-8", errors="ignore").rstrip()
         spd_details["base_speed_grade"] = speed_grade[0]
         spd_details["max_speed_grade"] = max(speed_grade)
+        spd_details["CRC32"] = crcCalc.checksum(content)
         spd_details["crc"] = crc
+        spd_details["filename"] = f"{spd_details["ddr_type"].replace(' ','_')}_{spd_details["dimm_type"]}_{spd_details["manufacturer"]}_{spd_details['part_number']}_{hex(spd_details["CRC32"])}.bin"
+        
         print(spd_details)
 
     except FileNotFoundError:
