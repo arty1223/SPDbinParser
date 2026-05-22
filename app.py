@@ -56,10 +56,23 @@ def main():
             content = file.read()
 
         ddr_type = content[2]  # тип ддр
-        spd_details["ddr_type"] = ddrTypes[str(ddr_type)]
-        ddr_type = spd_details["ddr_type"][spd_details["ddr_type"].find("DDR") + 3]
+        try:
+            spd_details["ddr_type"] = ddrTypes[str(ddr_type)]
+            ddr_type = spd_details["ddr_type"][spd_details["ddr_type"].find("DDR") + 3]
+        except:
+            raise Exception("unknown ddr type")
         speed_grade = [0,0,0]
         
+        spd_details["dimm_type"] = ""
+        spd_details["manufacturer"] = ""
+        spd_details["capacity"] = ""
+        spd_details["part_number"] = ""
+        spd_details["base_speed_grade"] = ""
+        spd_details["max_speed_grade"] = ""
+        spd_details["CRC32"] = ""
+        spd_details["crc"] = ""
+        spd_details["filename"] = ""
+
         match ddr_type:
             case "3":
                 if (content[0] & 0x80) == 0:
@@ -182,7 +195,10 @@ def main():
 
         dimm_type = content[3] & 0b1111
         spd_details["dimm_type"] = dimmTypes[ddr_type + str(dimm_type)]
-        spd_details["manufacturer"] = manufacturers[str(((manLb & ~0x80) << 8) + manHb)]
+        try:
+            spd_details["manufacturer"] = manufacturers[str(((manLb & ~0x80) << 8) + manHb)]
+        except KeyError:
+            spd_details["manufacturer"] = f'Unknown (JEDEC ID: {hex(((manLb & ~0x80) << 8) + manHb)})'
         spd_details["capacity"] = capacity  # В ГБ
         part_number = part_number.replace(b'\x00', b'')
         spd_details["part_number"] = part_number.decode("utf-8", errors="ignore").rstrip()
