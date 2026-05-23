@@ -36,6 +36,8 @@ def correct_speed(speed_mts: float) -> int:
     closest = min(jedecSpeeds, key=lambda x: abs(x - speed_mts))
     # Если разница больше 5% — возможно, это не JEDEC скорость, возвращаем округлённое целое
     if abs(closest - speed_mts) / speed_mts > 0.05:
+        if speed_mts > 15000:
+            return 0
         return int(round(speed_mts))
     return closest
 

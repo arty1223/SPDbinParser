@@ -11,7 +11,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": "DDR5_CRC_OK_M425R1GB4BB0-CQKOD.bin"
+            "args": "DDR4_SDRAM_UDIMM_Corsair_CMT32GX4M4C3000C15D_8GB_DDR4-2133P_downbin_H5AN8G8NCJR-TFC.bin"
             // "args": "DDR3_SDRAM_SO_DIMM_Micron_Technology_4JSF6464HY_1G1B1Z_512MB_DDR.bin"
         }
     ]
